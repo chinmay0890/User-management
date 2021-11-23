@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image sample</title>
+</head>
+
+<body>
+    <form action="">
+        <div>
+            <input type="file" id="img">
+        </div>
+        <div>
+            <input type="submit" id="sub" onclick="myfunction();event.preventDefault();">
+        </div>
+    </form>
+</body>
+<script>
+    function myfunction() {
+        const filename = document.getElementById("img");
+        console.log(filename);
+        let fd = new FormData();
+        fd.append('image', filename.files[0]);
+        console.log(fd);
+
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:8080/image");
+        xhr.onload = function () {
+            console.log(xhr.responseText);
+        }
+        xhr.send(fd);
+    }
+</script>
+
+</html>

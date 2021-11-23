@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="CSS/dash_subadmin_edit.css">
+    <title>dash_subadmin_edit</title>
+</head>
+<body>
+    <div class="subadmineditdashboard">
+        <h1 id="header">Welcome <span id="welcome"></span></h1>
+        <button id="logout" onclick="logoutbtnhandler()">logout</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>dob</th>
+                    <th>age</th>
+                    <th>mob</th>
+                    <th>present address</th>
+                    <th>permanent address</th>
+                    <th>email</th>
+                    <th>role</th>
+                    <th>status</th>
+                    <th>update</th>
+                </tr>
+            </thead>
+            <tbody id="tabledata"></tbody>
+
+        </table>
+    </div>
+</body>
+
+<script>
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:8080/employees",true);
+    xhr.getResponseHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+        var employees = JSON.parse(xhr.responseText);
+        console.log(employees)
+        tabledata(employees);
+    }
+    xhr.send();
+
+    function tabledata(employees) {
+        let html = "";
+        for (let employee of employees) {
+            html += "<tr><td>" + employee.id + "</td><td>" + employee.name + "</td><td>" + employee.dob + "</td><td>" + employee.age + "</td><td>" + employee.mob + "</td><td>" + employee.presentAddress + "</td><td>" + employee.permanentAddress + "</td><td>" + employee.email + "</td><td>" + employee.role + "</td><td>"+(employee.status === 1 ? "Verified" : "Pending")+"</td><td><button  onclick='edit(" + employee.id + ")'>edit</button></td></tr>"
+        }
+        console.log(html);
+        var tab = document.getElementById("tabledata");
+        tab.innerHTML = html;
+        var id = localStorage.getItem("login_id");
+        var data ={id:id}
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST","http://localhost:8080/employee/getIdDetails",true)
+        xhr.setRequestHeader("Content-type","application/json;charset=UTF-8")
+        xhr.onload = function(){
+            var emp = JSON.parse(xhr.responseText);
+            document.getElementById("welcome").innerHTML = emp.name
+        }
+        xhr.send(JSON.stringify(data));
+    }
+
+    function edit(id){
+        localStorage.setItem("sub_admin_edit_ID",id)
+        window.location.href = "update_subadmin_edit.html";
+    }
+    
+    function logoutbtnhandler(){
+        window.location.href = "login.html";
+    }
+</script>
+
+</html>

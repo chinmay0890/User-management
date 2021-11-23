@@ -1,0 +1,151 @@
+body
+{
+    background-image: url(3312.jpg);
+    background-position: top;
+    background-size: auto;
+}
+.forgotbox
+{
+    width: 550px;
+    height: auto;
+    padding: 70px 40px 10px;
+    background: rgba(216, 208, 208, 0.585);
+    border-radius: 20px;
+    left: 150px;
+    top: 70px;
+    position: absolute;
+    box-sizing: border-box;
+}
+.logo
+{
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    position: absolute;
+    top: -50px;
+    left: calc(50% - 50px);
+}
+h1
+{
+    margin: 0px;
+    padding: 0px 0px 20px;
+    text-align: center;
+    font-size: 40px;
+    color: rgb(52, 45, 52);
+    font-family: Arial, Helvetica, sans-serif;
+}
+label
+{
+    clear: left;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 22px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+input[id="id"],[id="name"],[id="dob"],[id="age"],[id="mob"],[id="present"],[id="permanent"],[id="email"]
+{
+    
+    float: right;
+    width: 56%;
+    height: 40px;
+    font-size: 17px;
+    opacity: 0.7;
+    border: none;
+    /* margin-bottom: 20px; */
+} 
+/* display: inline-block; */
+input[id="submit"]
+{
+    margin-left: 14%;
+    margin-top: 10px;
+    border: rgb(0, 211, 130);
+    border-radius: 25px;
+    border-style: solid;
+    border-width: 2px;
+    background-color: whitesmoke;
+    font-size: 25px;
+    height: 50px;
+    font-weight: normal;
+    color: rgb(0, 211, 130);
+    margin-bottom: 20px;
+    width: 40%;
+    cursor: pointer;
+    box-shadow: 2px 5px #8a8a8a;
+}
+input:hover[id="submit"]
+{
+    background-color:rgb(0, 211, 130);
+    color: whitesmoke;
+    border: none;
+    box-shadow: none;
+}
+input[id="back"]
+{
+    margin-left: 4%;
+    margin-top: 10px;
+    border: rgb(213, 109, 109);
+    border-radius: 25px;
+    border-style: solid;
+    border-width: 2px;
+    background-color: whitesmoke;
+    font-size: 25px;
+    height: 50px;
+    font-weight: normal;
+    color: rgb(213, 109, 109);
+    margin-bottom: 20px;
+    width: 40%;
+    cursor: pointer;
+    box-shadow: 2px 5px #8a8a8a;
+}
+input:hover[id="back"]
+{
+    background-color:rgb(213, 109, 109);
+    color: whitesmoke;
+    border: none;
+    box-shadow: none;
+}
+input[id="dash"]
+{
+    margin-top: 0px;
+    margin-left: 20%;
+    border-width: 2px;
+    border-radius: 25px;
+    border-style: solid;
+    background-color: whitesmoke;
+    border-color: rgb(0, 211, 130);
+    font-size: 25px;
+    height: 50px;
+    font-weight: normal;
+    color: rgb(0, 211, 130);
+    margin-bottom: 5px;
+    width: 60%;
+    cursor: pointer;
+    box-shadow: 2px 5px #636363;
+    
+}
+input[id="dash"]:hover
+{
+    background-color: rgb(0, 211, 130) ; 
+    color: whitesmoke;
+    border: none;
+    box-shadow: none;
+}
+img[id="displayimage"]{
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+    object-fit: cover;
+    margin-left: calc(50% - 75px );
+    margin-bottom: 20px;
+    
+}
+img[id="displayimage"]{
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+    object-fit: cover;
+    margin-left: calc(50% - 75px );
+    margin-bottom: 20px;
+    
+}

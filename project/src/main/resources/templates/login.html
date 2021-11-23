@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login page</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    
+      <body>
+      <div class="loginbox">
+        <img src="3300.jpg" class="car">
+        <h1>Login</h1>
+        <form>
+            <p>E-mail</p>
+            <input type="email" id="email" placeholder="Enter the email"  ><br>
+            <p>Password</p>
+            <input type="password" id="password" placeholder="Enter the password" ><br> 
+            <input type="checkbox" id="show" onclick="myFunction()"><label id=box>Show password</label><br><br>
+            <a href="#">Forgot password ?</a><br>
+            <input type="submit" name="login" value="Log In"><br><hr color="grey">
+            <p id="acc">Don't have an account?</p>
+            <a href="file:///C:/Users/Chinmay/Desktop/signup.html"><button name="signup">Sign up</button></a> 
+        </form>
+      </div>  
+ 
+<script>
+  function myFunction()
+  {
+    var x = document.getElementById("password");
+    if(x.type === "password")
+    {
+      x.type="text";
+    }
+    else {
+    x.type = "password";
+  }
+  }
+</script>
+
+    
+</body>
+</head>
+</html>

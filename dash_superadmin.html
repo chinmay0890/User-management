@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="CSS/dash_superadmin.css">
+    <title>superadmin</title>
+</head>
+
+<body>
+    <div class="superadmindashboard">
+        <img src="" id="displayimage">
+        <h1 id="header">Welcome <span id="welcome"></span></h1>
+        <button id="add" onclick="addbtnhandler()">Add User</button>
+        <select id="drop" onchange="dropdown()">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+        </select>
+        <input type="text" id="search" onkeyup="search()" placeholder="Search...">
+        <button id="logout" onclick="logoutbtnhandler()">logout</button>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>dob</th>
+                    <th>age</th>
+                    <th>mob</th>
+                    <th>present address</th>
+                    <th>permanent address</th>
+                    <th>email</th>
+                    <th>role</th>
+                    <th>Status</th>
+                    <th>Edit</th>
+                    <th>Verify</th>
+                </tr>
+            </thead>
+            <tbody id="tabledata"></tbody>
+        </table>
+        <div id="pages"></div>
+    </div>
+
+
+</body>
+
+<script>
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
+    localStorage.setItem("current_page", "1");
+    dropdown();
+
+    function tabledata(employees) {
+        let html = "";
+        for (let employee of employees) {
+            html += "<tr><td>" + employee.id + "</td><td>" + employee.name + "</td><td>" + employee.dob + "</td><td>" + employee.age + "</td><td>" + employee.mob + "</td><td>" + employee.presentAddress + "</td><td>" + employee.permanentAddress + "</td><td>" + employee.email + "</td><td>" + employee.role + "</td><td>" + (employee.status === 1 ? "Verified" : "Pending") + "</td><td><button  onclick='edit(" + employee.id + ")'>edit</button></td><td><div id=" + employee.id + "><input id='c" + employee.id + "' type='checkbox' onclick=tick(" + employee.id + ") " + (employee.status === 1 ? "checked" : "") + " >" + (employee.status == 0 ? ((employee.created_by == employee.id) && (employee.updated_by === "null") ? "Created" : "Updated") : "") + "</div> </td></tr>"
+        }
+        console.log(html);
+        var tab = document.getElementById("tabledata");
+        tab.innerHTML = html;
+        var id = localStorage.getItem("login_id");
+        var data = { id: id }
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:8080/employee/getIdDetails", true)
+        xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8")
+        xhr.onload = function () {
+            var emp = JSON.parse(xhr.responseText);
+            document.getElementById("welcome").innerHTML = emp.name
+        }
+        xhr.send(JSON.stringify(data));
+    }
+
+    function edit(id) {
+        localStorage.setItem("superadmin_id", id);
+        window.location.href = "update_superadmin.html";
+    }
+
+    function tick(id) {
+        var box = document.getElementById("c" + id).checked;
+        console.log(box);
+        if (box === false) {
+            console.log(box)
+            var data = {
+                id: id
+            }
+            console.log(data);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8080/employee/getIdDetails", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onload = function () {
+                var employee = JSON.parse(xhr.responseText);
+                console.log(employee);
+                employee.status = 0;
+                employee.updated_by = localStorage.getItem("login_id");
+                console.log(employee.status);
+                var xrh = new XMLHttpRequest();
+                xrh.open("POST", "http://localhost:8080/employee/update", true);
+                xrh.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xrh.onload = function () {
+                    console.log(xrh.responseText);
+                }
+                xrh.send(JSON.stringify(employee));
+            }
+            xhr.send(JSON.stringify(data));
+        }
+        else {
+            var data = { id: id };
+            console.log(data);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8080/employee/getIdDetails", true)
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onload = function () {
+                var employee = JSON.parse(xhr.responseText);
+                console.log(employee);
+                employee.status = 1;
+                employee.updated_by = localStorage.getItem("login_id");
+                console.log(employee.status);
+                var xrh = new XMLHttpRequest();
+                xrh.open("POST", "http://localhost:8080/employee/update", true)
+                xrh.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xrh.onload = function () {
+                    console.log(xrh.responseText);
+                }
+                xrh.send(JSON.stringify(employee));
+            }
+            xhr.send(JSON.stringify(data));
+        }
+    }
+
+    function calcage(dob) {
+        var today = new Date();
+        var birth = new Date(dob);
+        var age = today.getFullYear() - birth.getFullYear();
+        var month = today.getMonth() - birth.getMonth();
+        var date = today.getDate() - birth.getDate();
+        if (month < 0 || (month === 0 && date < 0)) {
+            age--;
+        }
+        return age;
+    }
+
+    function logoutbtnhandler() {
+        window.location.href = "login.html";
+    }
+
+    function addbtnhandler() {
+        window.location.href = "signup_superadmin.html";
+    }
+
+    function search() {
+        var input, filter, table, tr, tds, td, i, j, txtValue, cell, flag;
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            tds = tr[i].getElementsByTagName("td");
+            flag = false;
+            for (j = 0; j < tds.length - 4; j++) {
+                td = tds[j];
+
+
+                //txtValue = td.textContent || td.innerHTML;
+
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    flag = true;
+                }
+
+            }
+            if (flag) {
+                tr[i].style.display = "";
+            }
+            else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+    function jump(pageno) {
+        localStorage.setItem("current_page", pageno);
+        var num = document.getElementById("drop").value;
+        console.log("gfhs");
+        let html = "";
+        var xrh = new XMLHttpRequest();
+        xrh.open("GET", "http://localhost:8080/employees/" + pageno + "," + num, true)
+        xrh.getResponseHeader("Content-Type", "application/json");
+        xrh.onload = function () {
+            var employees = JSON.parse(xrh.responseText);
+            console.log(employees);
+            for (let employee of employees) {
+                if (employee.role == 4 || employee.role == 2 || employee.role == 3) {
+                    html += "<tr><td>" + employee.id + "</td><td>" + employee.name + "</td><td>" + employee.dob + "</td><td>" + employee.age + "</td><td>" + employee.mob + "</td><td>" + employee.presentAddress + "</td><td>" + employee.permanentAddress + "</td><td>" + employee.email + "</td><td>" + employee.role + "</td><td>" + (employee.status === 1 ? "Verified" : "Pending") + "</td><td><button  onclick='edit(" + employee.id + ")'>edit</button></td><td>" + (employee.role === 1 ? "" : "<div id=" + employee.id + "><input id='c" + employee.id + "' type='checkbox' onclick=tick(" + employee.id + ") " + (employee.status === 1 ? "checked" : "") + " >" + (employee.status == 0 ? ((employee.created_by == employee.id) && (employee.updated_by === "null") ? "Created" : "Updated") : "") + "</div>") + " </td></tr>"
+                }
+                var tab = document.getElementById("tabledata");
+                tab.innerHTML = html;
+                var id = localStorage.getItem("login_id");
+                var data = { id: id }
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://localhost:8080/employee/getIdDetails", true)
+                xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8")
+                xhr.onload = function () {
+                    var emp = JSON.parse(xhr.responseText);
+                    //console.log(emp)
+                    document.getElementById("welcome").innerHTML = emp.name
+                    
+                }
+                xhr.send(JSON.stringify(data));
+            }
+        }
+        xrh.send();
+    }
+
+    function dropdown() {
+        var num = document.getElementById("drop").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://localhost:8080/employees", true);
+        xhr.getResponseHeader("Content-Type", "application/json");
+        xhr.onload = function () {
+            var employees = JSON.parse(xhr.responseText);
+            const pages = Math.ceil(employees.length / num);
+            var html = "";
+            for (let index = 1; index <= pages; index++) {
+                html += " <button id='" + index + "' onclick='jump(" + index + ")'>" + index + "</button>";
+            }
+            document.getElementById("pages").innerHTML = html;
+            if (localStorage.getItem("current_page") > pages) {
+                jump(pages);
+            }
+            else {
+                jump(localStorage.getItem("current_page"));
+            }
+        }
+        xhr.send();
+    }
+</script>
+
+</html>

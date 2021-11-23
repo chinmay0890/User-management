@@ -1,0 +1,70 @@
+body
+{
+    background-image: url("3312.jpg");
+    background-position: top;
+    background-size: auto;
+    position: relative;
+
+}
+.dashboard
+{
+    width: 95%;
+    height: auto;
+    position: absolute;
+    margin-top: 100px;
+    margin-left: 2.5%;
+    margin-bottom: 100px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    background: rgba(216, 208, 208, 0.775);
+}
+table
+{
+    width: 96%;
+    border: solid;
+    border-width: 1px;
+    border-color:black;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 2%;
+    margin-right: 10px;
+    margin-top: 50px;
+    border-collapse: collapse;
+}
+th,td
+{
+   height: fit-content;
+    border: solid;
+    border-width: 1px;
+    border-color:black;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 8px;
+    font-size: 17px;
+}
+th
+{
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+}
+button[id="logout"]
+{
+    float: right;
+    height: 40px;
+    width: 80px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+h1
+{
+    text-align: center;
+    font-size: 40px;
+    color: rgb(52, 45, 52);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bolder ;
+}
+span
+{
+    font-size: 40px;
+    color: rgb(52, 45, 52);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bolder ;   
+}

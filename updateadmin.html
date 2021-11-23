@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>update</title>
+    <link rel="stylesheet" href="CSS/updateadmin.css">
+</head>
+
+<body>
+    <div class="forgotbox">
+        <img class="logo" src="images/3300.jpg">
+        <h1>Update details</h1>
+        <span id="fail" style="color: rgb(211, 36, 36); display: none; text-align: center; font-size: 20px;">* Failed to update details</span>
+        <span id="success" style="color: rgb(122, 211, 32); display: none; text-align: center; font-size: 20px;">* Details updated successfully</span>
+        <form>
+            <label id="labelid">Employee ID</label>
+            <input readonly type="number" id="id"><br>
+            <label id="labelname">Name</label>
+            <input type="text" id="name"><br>
+            <label id="labeldob">Date of birth</label>
+            <input type="date" id="dob"><br>
+            <label id="labelage">Age</label>
+            <input readonly type="text" id="age"><br>
+            <label id="labelmobile">Mobile</label>
+            <input type="text" id="mob"><br>
+            <label id="labelpresent">Present address</label>
+            <input type="text" id="present"><br>
+            <label id="labelpermanent">Permanent address</label>
+            <input type="text" id="permanent"><br>
+            <label id="labelemail">Email address</label>
+            <input type="email" id="email"><br>
+            <input style="display: none;" type="submit" id="dash" value="Dashboard" onclick="dashbtnhandler();event.preventDefault();">
+            <input type="submit" id="back" value="Back" onclick="backbtnhandler();event.preventDefault();">
+            <input type="submit" id="submit" value="update" onclick="updatebtnhandler();event.preventDefault();">
+        </form>
+        
+
+    </div>
+</body>
+
+<script>
+    var id = localStorage.getItem("id2");
+    console.log(id);
+    var data = {
+        id: id
+    }
+    console.log(data);
+    var xhr = new XMLHttpRequest();
+    xhr.getResponseHeader("Content-type", "application/json");
+    xhr.open("GET", "http://localhost:8080/employee/" + id, true);
+    xhr.onload = function () {
+        var data1 = JSON.parse(xhr.responseText);
+        console.log(data1);
+        document.getElementById("id").value = data1.id;
+        document.getElementById("name").value = data1.name;
+        document.getElementById("dob").value = data1.dob;
+        document.getElementById("age").value = data1.age;
+        document.getElementById("mob").value = data1.mob;
+        document.getElementById("present").value = data1.presentAddress;
+        document.getElementById("permanent").value = data1.permanentAddress;
+        document.getElementById("email").value = data1.email;
+        var birth = document.getElementById("dob");
+        var age2 = document.getElementById("age");
+        birth.addEventListener("input",function(){age2.value = calcage(birth.value)})
+        
+    }
+    xhr.send();
+
+    function updatebtnhandler() {
+        console.log("you have clicked the update button");
+        var id = document.getElementById("id").value;
+        var name = document.getElementById("name").value;
+        var dob = document.getElementById("dob").value;
+        //console.log(dob); 
+        //console.log(calcage(dob));
+        var age = document.getElementById("age").value;
+        var mob = document.getElementById("mob").value;
+        var present = document.getElementById("present").value;
+        var permanent = document.getElementById("permanent").value;
+        var email = document.getElementById("email").value;
+        var data = {
+            id: id,
+            name: name,
+            dob: dob,
+            age:age,
+            mob: mob,
+            presentAddress: present,
+            permanentAddress: permanent,
+            email: email
+        }
+        console.log(data);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:8080/employee/update", true)
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onload = function () {
+            var d = xhr.responseText;
+            console.log(d);
+            if (d === "Details updated successfully") {
+                document.getElementById("labelid").style.display = "none";
+                document.getElementById("labelname").style.display = "none";
+                document.getElementById("labeldob").style.display = "none";
+                document.getElementById("labelage").style.display = "none";
+                document.getElementById("labelmobile").style.display = "none";
+                document.getElementById("labelpresent").style.display = "none";
+                document.getElementById("labelpermanent").style.display = "none";
+                document.getElementById("labelemail").style.display = "none";
+
+                document.getElementById("success").style.display = "block";
+                document.getElementById("id").style.display="none";
+                document.getElementById("name").style.display="none";
+                document.getElementById("dob").style.display="none";
+                document.getElementById("age").style.display="none";
+                document.getElementById("mob").style.display="none";
+                document.getElementById("present").style.display="none";
+                document.getElementById("permanent").style.display="none";
+                document.getElementById("email").style.display="none";
+
+                document.getElementById("back").style.display="none";
+                document.getElementById("submit").style.display="none";
+                document.getElementById("dash").style.display="block"
+            }
+            else{
+                document.getElementById("fail").style.display = "block";
+                document.getElementById("id").value="";
+                document.getElementById("name").value="";
+                document.getElementById("dob").value="";
+                document.getElementById("age").value="";
+                document.getElementById("mob").value="";
+                document.getElementById("present").value="";
+                document.getElementById("permanent").value="";
+                document.getElementById("email").value="";
+            }
+        }
+        xhr.send(JSON.stringify(data));
+    }
+
+    function dashbtnhandler(){
+        window.location.href="admindashboard.html";
+    }
+
+    function backbtnhandler(){
+        window.location.href="admindashboard.html";
+    }
+
+    function calcage(dob){
+        var today = new Date();
+        var birth = new Date(dob);
+        var age = today.getFullYear() - birth.getFullYear();
+        var month = today.getMonth() - birth.getMonth();
+        var date = today.getDate() - birth.getDate();
+        if(month<0 || (month===0 && date<0)){
+            age--;
+        }
+        return age;
+    }
+
+</script>
+
+</html>

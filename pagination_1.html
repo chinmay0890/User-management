@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <table>
+        <thead>
+            <th>data</th>
+        </thead>
+        <tbody id = "userDetailsdata">
+
+        </tbody>
+    </table>
+    <div id="pages"></div>
+
+</body>
+
+<script>
+
+
+    jump(1)
+    // var current_page = localStorage.setItem("page_no",)
+    // var page = localStorage.getItem("page_no");
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:8080/employees", true);
+    xhr.getResponseHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+        var employees = JSON.parse(xhr.responseText);
+        var number = employees.length;
+        console.log(employees.length)
+        const pages = Math.ceil(employees.length / 25);
+        console.log(pages);
+        loadpages(pages);
+       
+    }
+    xhr.send();
+
+
+
+    function loadpages(pages) {
+        var html = "";
+        for (let index = 1; index <= pages; index++) {
+            html += " <button id='" + index + "' onclick='jump(" + index + ")'>" + index + "</button>";
+        }
+        document.getElementById("pages").innerHTML = html;
+    }
+
+    function jump(pageno) {
+        document.getElementById("userDetailsdata").innerHTML = "<tr></tr>"
+        var xrh = new XMLHttpRequest();
+        xrh.open("GET", "http://localhost:8080/employees/" + pageno, true);
+        xrh.getResponseHeader("Content-Type", "application/json");
+        xrh.onload = function(){
+            console.log(JSON.parse(xrh.responseText));
+            var datas = JSON.parse(xrh.responseText);
+            var tabledatas =""
+            for(let data of datas){
+                tabledatas+= "<tr><td>"+data.id+"</td></tr>"
+            }
+            console.log(tabledatas)
+            document.getElementById("userDetailsdata").innerHTML = tabledatas 
+
+            
+        }
+        xrh.send();
+    }
+</script>
+
+</html>
